@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pakistan Payment Solutions — @pkpayout_bot</title>
+<meta name="description" content="Pakistan Payment Solutions — Worldwide payment processing, settlements, and financial infrastructure. 2 years of trusted market experience.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00E676;
+    --green-dim: #00c45e;
+    --green-glow: rgba(0,230,118,0.18);
+    --bg: #050c0a;
+    --bg2: #080f0d;
+    --surface: #0d1a16;
+    --surface2: #112219;
+    --border: rgba(0,230,118,0.12);
+    --border-bright: rgba(0,230,118,0.3);
+    --text: #e8f5f0;
+    --text-dim: #7a9e90;
+    --text-muted: #3d5e52;
+    --red: #ff4444;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* Ambient glow */
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,230,118,0.06) 0%, transparent 70%);
+    top: -200px; right: -100px;
+  }
+  .glow-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,230,118,0.04) 0%, transparent 70%);
+    bottom: 200px; left: -100px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 72px;
+    background: rgba(5,12,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 36px; height: 36px;
+    background: var(--green);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: -1px;
+    box-shadow: 0 0 20px var(--green-glow);
+  }
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+  .nav-logo-text span { color: var(--green); }
+  .nav-logo-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  .nav-cta {
+    background: var(--green);
+    color: #000 !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    transition: background 0.2s, box-shadow 0.2s !important;
+    box-shadow: 0 0 16px rgba(0,230,118,0.25);
+  }
+  .nav-cta:hover {
+    background: var(--green-dim) !important;
+    box-shadow: 0 0 28px rgba(0,230,118,0.4) !important;
+    color: #000 !important;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 120px 5% 80px;
+    overflow: hidden;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    border-radius: 100px;
+    padding: 6px 16px 6px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge-dot {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,230,118,0.4); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(0,230,118,0); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 7vw, 88px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    max-width: 900px;
+    margin: 0 auto 24px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--green);
+    position: relative;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--text-dim);
+    max-width: 540px;
+    font-weight: 300;
+    margin: 0 auto 48px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--green);
+    color: #000;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.25s;
+    box-shadow: 0 0 24px rgba(0,230,118,0.3);
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover {
+    background: #fff;
+    box-shadow: 0 0 40px rgba(0,230,118,0.3);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent;
+    color: var(--text);
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 15px;
+    text-decoration: none;
+    border: 1px solid var(--border-bright);
+    transition: all 0.25s;
+    letter-spacing: 0.01em;
+  }
+  .btn-outline:hover {
+    border-color: var(--green);
+    color: var(--green);
+    transform: translateY(-2px);
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    margin-top: 60px;
+  }
+  .ticker {
+    display: flex; gap: 0;
+    animation: ticker 30s linear infinite;
+    width: max-content;
+  }
+  .ticker-item {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 0 36px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+  .ticker-item span { color: var(--green); font-size: 18px; }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* STATS */
+  .stats-section {
+    padding: 80px 5%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    background: var(--border);
+    max-width: 1100px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative; z-index: 1;
+  }
+  .stat-card {
+    background: var(--surface);
+    padding: 40px 32px;
+    text-align: center;
+  }
+  .stat-card:first-child { border-radius: 14px 0 0 14px; }
+  .stat-card:last-child { border-radius: 0 14px 14px 0; }
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* SECTION COMMON */
+  section { position: relative; z-index: 1; }
+  .section-wrap { max-width: 1100px; margin: 0 auto; padding: 100px 5%; }
+
+  .section-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: rgba(0,230,118,0.08);
+    border: 1px solid rgba(0,230,118,0.2);
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(30px, 4vw, 50px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    max-width: 680px;
+    margin-bottom: 16px;
+  }
+  .section-title em { font-style: normal; color: var(--green); }
+
+  .section-desc {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 540px;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  /* SERVICES GRID */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .service-card {
+    background: var(--surface);
+    padding: 40px 36px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .service-card:hover { background: var(--surface2); }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-icon {
+    width: 48px; height: 48px;
+    background: rgba(0,230,118,0.1);
+    border: 1px solid var(--border-bright);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+    transition: all 0.3s;
+  }
+  .service-card:hover .service-icon {
+    background: rgba(0,230,118,0.18);
+    box-shadow: 0 0 20px var(--green-glow);
+  }
+  .service-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .service-card p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .service-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--green);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 20px;
+    background: rgba(0,230,118,0.07);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  /* COMPARISON TABLE */
+  .comparison-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  @media (max-width: 680px) {
+    .comparison-wrap { grid-template-columns: 1fr; }
+  }
+  .compare-col {
+    background: var(--surface);
+    padding: 40px 36px;
+  }
+  .compare-col.is-us { background: var(--surface2); }
+  .compare-col h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+    color: var(--text-dim);
+  }
+  .compare-col.is-us h3 { color: var(--green); }
+  .compare-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .compare-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .compare-list li .ico {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 1px;
+  }
+  .ico-bad { background: rgba(255,68,68,0.15); color: var(--red); }
+  .ico-good { background: rgba(0,230,118,0.15); color: var(--green); }
+
+  /* LIVE FEED */
+  .feed-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 780px) { .feed-grid { grid-template-columns: 1fr; } }
+
+  .feed-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .feed-panel-head {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .feed-panel-head .live-dot {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--green);
+    font-size: 11px;
+  }
+  .feed-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(0,230,118,0.05);
+    transition: background 0.2s;
+  }
+  .feed-row:last-child { border-bottom: none; }
+  .feed-row:hover { background: rgba(0,230,118,0.03); }
+  .feed-left { display: flex; align-items: center; gap: 10px; }
+  .feed-flag { font-size: 20px; }
+  .feed-info .name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .feed-info .method { font-size: 11px; color: var(--text-dim); }
+  .feed-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.06em;
+  }
+  .status-live { background: rgba(0,230,118,0.12); color: var(--green); }
+  .status-fast { background: rgba(0,230,118,0.08); color: var(--green-dim); }
+
+  /* TESTIMONIALS */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .testi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .testi-card:hover { border-color: var(--border-bright); transform: translateY(-4px); }
+  .testi-stars { color: var(--green); font-size: 13px; margin-bottom: 16px; letter-spacing: 2px; }
+  .testi-text {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green), #007a40);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    flex-shrink: 0;
+  }
+  .testi-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .testi-role { font-size: 11px; color: var(--text-dim); }
+
+  /* FAQ */
+  .faq-list { display: flex; flex-direction: column; gap: 2px; }
+  .faq-item {
+    background: var(--surface);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .faq-item.open { border-color: var(--border-bright); }
+  .faq-q {
+    padding: 22px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    user-select: none;
+    gap: 16px;
+  }
+  .faq-q:hover { color: var(--green); }
+  .faq-arrow {
+    width: 24px; height: 24px;
+    flex-shrink: 0;
+    border: 1px solid var(--border-bright);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--green);
+    transition: transform 0.3s;
+  }
+  .faq-item.open .faq-arrow { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+  .faq-a-inner { padding: 0 28px 22px; }
+
+  /* CTA SECTION */
+  .cta-section {
+    margin: 0 5% 100px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    border-radius: 24px;
+    padding: 80px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 300px; height: 200px;
+    background: radial-gradient(ellipse, rgba(0,230,118,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+  }
+  .cta-section p {
+    font-size: 17px;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  /* MARKETS SELECT */
+  .markets-form {
+    display: flex; align-items: center; gap: 12px;
+    justify-content: center; flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .markets-select {
+    background: var(--bg);
+    border: 1px solid var(--border-bright);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 12px 20px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    cursor: pointer;
+    min-width: 260px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300E676' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 36px;
+    transition: border-color 0.2s;
+  }
+  .markets-select:focus { border-color: var(--green); }
+  .markets-select option { background: var(--surface); }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 60px 5% 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto 48px;
+  }
+  @media (max-width: 780px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+  .footer-brand p {
+    font-size: 14px;
+    color: var(--text-dim);
+    max-width: 260px;
+    margin: 14px 0 24px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .footer-social-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,230,118,0.08);
+    border: 1px solid var(--border-bright);
+    color: var(--green);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .footer-social-link:hover {
+    background: var(--green);
+    color: #000;
+  }
+  .footer-col h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a {
+    font-size: 14px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 300;
+  }
+  .footer-col a:hover { color: var(--green); }
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .footer-bottom span { color: var(--text-dim); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 780px) {
+    .nav-links { display: none; }
+    .stats-section { grid-template-columns: 1fr 1fr; }
+    .stat-card:first-child { border-radius: 14px 14px 0 0; }
+    .stat-card:last-child { border-radius: 0 0 14px 14px; }
+    .cta-section { padding: 48px 28px; }
+  }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 38px; }
+    .hero-actions { flex-direction: column; width: 100%; }
+    .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+    .stats-section { grid-template-columns: 1fr; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="glow-orb glow-orb-1"></div>
+<div class="glow-orb glow-orb-2"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">PK</div>
+    <div>
+      <div class="nav-logo-text"><span>PK</span>Payout</div>
+      <div class="nav-logo-sub">@pkpayout_bot</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#markets">Markets</a></li>
+    <li><a href="#compare">Why Us</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="https://t.me/pkpayout_bot" target="_blank" class="nav-cta">Connect on Telegram ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    2 Years in Market · Trusted Worldwide
+  </div>
+  <h1>Pakistan's Premier<br><em>Payment Gateway</em><br>Goes Global.</h1>
+  <p class="hero-sub">Instant settlements, zero P2P risk, and enterprise-grade infrastructure — built from Pakistan, deployed worldwide.</p>
+  <div class="hero-actions">
+    <a href="https://t.me/pkpayout_bot" target="_blank" class="btn-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.018 9.509c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 14.578l-2.95-.924c-.642-.2-.654-.642.136-.953l11.5-4.432c.537-.194 1.006.131.686.979z"/></svg>
+      Start on Telegram
+    </a>
+    <a href="#services" class="btn-outline">Explore Services ↓</a>
+  </div>
+
+  <!-- Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <div class="ticker-item"><span>🇵🇰</span> Pakistan · JazzCash · EasyPaisa</div>
+      <div class="ticker-item"><span>🇮🇳</span> India · UPI · Paytm · GPay</div>
+      <div class="ticker-item"><span>🇧🇩</span> Bangladesh · bKash · Nagad</div>
+      <div class="ticker-item"><span>🇦🇪</span> UAE · Bank Transfer</div>
+      <div class="ticker-item"><span>🇬🇧</span> UK · Bank Transfer</div>
+      <div class="ticker-item"><span>🇺🇸</span> USA · ACH · Wire</div>
+      <div class="ticker-item"><span>🇪🇬</span> Egypt · Vodafone Cash</div>
+      <div class="ticker-item"><span>🇹🇷</span> Turkey · Papara · Payco</div>
+      <div class="ticker-item"><span>🌍</span> 20+ Countries Covered</div>
+      <!-- duplicate for infinite loop -->
+      <div class="ticker-item"><span>🇵🇰</span> Pakistan · JazzCash · EasyPaisa</div>
+      <div class="ticker-item"><span>🇮🇳</span> India · UPI · Paytm · GPay</div>
+      <div class="ticker-item"><span>🇧🇩</span> Bangladesh · bKash · Nagad</div>
+      <div class="ticker-item"><span>🇦🇪</span> UAE · Bank Transfer</div>
+      <div class="ticker-item"><span>🇬🇧</span> UK · Bank Transfer</div>
+      <div class="ticker-item"><span>🇺🇸</span> USA · ACH · Wire</div>
+      <div class="ticker-item"><span>🇪🇬</span> Egypt · Vodafone Cash</div>
+      <div class="ticker-item"><span>🇹🇷</span> Turkey · Papara · Payco</div>
+      <div class="ticker-item"><span>🌍</span> 20+ Countries Covered</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div style="padding: 0 5%; position: relative; z-index: 1;" class="fade-up">
+  <div class="stats-section">
+    <div class="stat-card">
+      <div class="stat-number">2+</div>
+      <div class="stat-label">Years in Market</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">20+</div>
+      <div class="stat-label">Countries Served</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">&lt;2s</div>
+      <div class="stat-label">Settlement Speed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">24/7</div>
+      <div class="stat-label">Live Operations</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-wrap">
+    <div class="section-label fade-up">Our Services</div>
+    <h2 class="section-title fade-up">Built for <em>Speed,</em><br>Designed for Scale.</h2>
+    <p class="section-desc fade-up">From domestic Pakistani payments to worldwide settlements — a single, reliable infrastructure handles it all.</p>
+    <div class="services-grid fade-up">
+      <div class="service-card">
+        <div class="service-icon">💸</div>
+        <h3>Pakistan Domestic Payouts</h3>
+        <p>Instant payouts via JazzCash, EasyPaisa, and direct bank transfers across all major Pakistani banks. Fully automated, zero manual steps.</p>
+        <div class="service-tag">JazzCash · EasyPaisa · Banks</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌐</div>
+        <h3>Worldwide Settlements</h3>
+        <p>Settle in India (UPI/Paytm), Bangladesh (bKash), UAE, UK, US, Egypt, and 15+ more corridors with unified API access and guaranteed finality.</p>
+        <div class="service-tag">Global Coverage</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚡</div>
+        <h3>Instant Processing Engine</h3>
+        <p>Sub-2-second validation on most corridors. Our processing node eliminates queuing, manual approval, and counterparty delay.</p>
+        <div class="service-tag">Real-Time · No Delays</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔒</div>
+        <h3>Zero Counterparty Risk</h3>
+        <p>Pre-funded settlement model ensures you never rely on third-party availability. Funds are guaranteed, not contingent on P2P routing.</p>
+        <div class="service-tag">Pre-Funded · Secure</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Operational Dashboard</h3>
+        <p>Real-time visibility into every transaction, corridor health, and settlement status. Full reporting with live node monitoring included.</p>
+        <div class="service-tag">Live Reporting</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤝</div>
+        <h3>Partnership Program</h3>
+        <p>Become a regional partner in your market. We provide the infrastructure, liquidity, and technical backbone — you bring local volume.</p>
+        <div class="service-tag">Revenue Share · B2B</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE FEED -->
+<section id="markets">
+  <div class="section-wrap" style="padding-top: 0;">
+    <div class="section-label fade-up">Live Network</div>
+    <h2 class="section-title fade-up">Active Corridors,<br><em>Right Now.</em></h2>
+    <p class="section-desc fade-up">Our processing nodes are live across all major corridors. Every payment settles in real-time with full validation.</p>
+    <div class="feed-grid fade-up">
+      <div class="feed-panel">
+        <div class="feed-panel-head">
+          <span>Regional Nodes</span>
+          <span class="live-dot"><span class="hero-badge-dot"></span> LIVE</span>
+        </div>
+        <div class="feed-row">
+          <div class="feed-left">
+            <span class="feed-flag">🇵🇰</span>
+            <div class="feed-info">
+              <div class="name">Pakistan Node</div>
+              <div class="method">JazzCash · EasyPaisa · Banks</div>
+            </div>
+          </div>
+          <span class="feed-status status-live">Active &lt;2s</span>
+        </div>
+        <div class="feed-row">
+          <div class="feed-left">
+            <span class="feed-flag">🇮🇳</span>
+            <div class="feed-info">
+              <div class="name">India Node</div>
+              <div class="method">UPI · Paytm · GPay · PhonePe</div>
+            </div>
+          </div>
+          <span class="feed-status status-live">Active &lt;1s</span>
+        </div>
+        <div class="feed-row">
+          <div class="feed-left">
+            <span class="feed-flag">🇧🇩</span>
+            <div class="feed-info">
+              <div class="name">Bangladesh Node</div>
+              <div class="method">bKash · Nagad · Rocket</div>
+            </div>
+          </div>
+          <span class="feed-status status-fast">Active</span>
+        </div>
+        <div class="feed-row">
+          <div class="feed-left">
+            <span class="feed-flag">🇦🇪</span>
+            <div class="feed-info">
+              <div class="name">UAE Node</div>
+              <div class="method">Bank Transfer · SWIFT</div>
+            </div>
+          </div>
+          <span class="feed-status status-fast">Active</span>
+        </div>
+        <div class="feed-row">
+          <div class="feed-left">
+            <span class="feed-flag">🇪🇬</span>
+            <div class="feed-info">
+              <div class="name">Egypt Node</div>
+              <div class="method">Vodafone Cash · Fawry</div>
+            </div>
+          </div>
+          <span class="feed-status status-fast">Active</span>
+        </div>
+        <div class="feed-row">
+          <div class="feed-left">
+            <span class="feed-flag">🇹🇷</span>
+            <div class="feed-info">
+              <div class="name">Turkey Node</div>
+              <div class="method">Papara · Payco · Bank</div>
+            </div>
+          </div>
+          <span class="feed-status status-fast">Active</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="feed-panel" style="margin-bottom: 20px;">
+          <div class="feed-panel-head"><span>More Corridors</span></div>
+          <div class="feed-row">
+            <div class="feed-left"><span class="feed-flag">🇬🇧</span><div class="feed-info"><div class="name">United Kingdom</div><div class="method">Faster Payments · CHAPS</div></div></div>
+            <span class="feed-status status-fast">Active</span>
+          </div>
+          <div class="feed-row">
+            <div class="feed-left"><span class="feed-flag">🇺🇸</span><div class="feed-info"><div class="name">United States</div><div class="method">ACH · Wire · Zelle</div></div></div>
+            <span class="feed-status status-fast">Active</span>
+          </div>
+          <div class="feed-row">
+            <div class="feed-left"><span class="feed-flag">🇳🇵</span><div class="feed-info"><div class="name">Nepal</div><div class="method">Khalti · eSewa · IME</div></div></div>
+            <span class="feed-status status-fast">Active</span>
+          </div>
+          <div class="feed-row">
+            <div class="feed-left"><span class="feed-flag">🇸🇦</span><div class="feed-info"><div class="name">Saudi Arabia</div><div class="method">STC Pay · Mada</div></div></div>
+            <span class="feed-status status-fast">Active</span>
+          </div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border-bright); border-radius: 14px; padding: 28px 24px; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 12px;">🌍</div>
+          <div style="font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px;">20+ Countries</div>
+          <div style="font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px;">Not seeing your corridor? Contact us directly — we add new markets continuously.</div>
+          <a href="https://t.me/pkpayout_bot" target="_blank" class="btn-primary" style="font-size: 13px; padding: 10px 20px; display: inline-flex;">
+            Ask About Your Market →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="compare">
+  <div class="section-wrap" style="padding-top: 0;">
+    <div class="section-label fade-up">The Difference</div>
+    <h2 class="section-title fade-up">Why Choose <em>PK Payout</em><br>Over P2P?</h2>
+    <p class="section-desc fade-up">Old-school peer-to-peer settlement is fragmented, risky, and unreliable. Our infrastructure eliminates all that.</p>
+    <div class="comparison-wrap fade-up">
+      <div class="compare-col">
+        <h3>❌ Outdated P2P Methods</h3>
+        <ul class="compare-list">
+          <li><span class="ico ico-bad">✕</span> Dependent on individual availability</li>
+          <li><span class="ico ico-bad">✕</span> High counterparty risk on every transaction</li>
+          <li><span class="ico ico-bad">✕</span> Slow, inconsistent settlement times</li>
+          <li><span class="ico ico-bad">✕</span> No real-time transaction visibility</li>
+          <li><span class="ico ico-bad">✕</span> Manual validation and approval hurdles</li>
+          <li><span class="ico ico-bad">✕</span> Limited to 1-2 local payment methods</li>
+          <li><span class="ico ico-bad">✕</span> Zero accountability or dispute resolution</li>
+        </ul>
+      </div>
+      <div class="compare-col is-us">
+        <h3>✓ Pakistan Payment Solutions</h3>
+        <ul class="compare-list">
+          <li><span class="ico ico-good">✓</span> 24/7 node availability — always online</li>
+          <li><span class="ico ico-good">✓</span> Pre-funded model = zero counterparty risk</li>
+          <li><span class="ico ico-good">✓</span> Sub-2-second settlement across all corridors</li>
+          <li><span class="ico ico-good">✓</span> Full real-time dashboard and reporting</li>
+          <li><span class="ico ico-good">✓</span> Fully automated validation layer</li>
+          <li><span class="ico ico-good">✓</span> 20+ corridors, 100+ payment methods</li>
+          <li><span class="ico ico-good">✓</span> 2 years of proven market reliability</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="section-wrap" style="padding-top: 0;">
+    <div class="section-label fade-up">Testimonials</div>
+    <h2 class="section-title fade-up">Trusted by <em>Operators</em><br>Worldwide.</h2>
+    <p class="section-desc fade-up">What our partners say after switching to PK Payout's infrastructure.</p>
+    <div class="testimonials-grid fade-up">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"PK Payout completely transformed our Pakistan corridor. JazzCash and EasyPaisa settlements that used to take hours now land in under 2 seconds. The reliability is unmatched."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AH</div>
+          <div>
+            <div class="testi-name">Asif H.</div>
+            <div class="testi-role">Pakistan Operations</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"We needed a single partner for India UPI and Pakistan payouts simultaneously. @pkpayout_bot handled both seamlessly. Truly world-class infrastructure at a competitive rate."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">RK</div>
+          <div>
+            <div class="testi-name">Rahul K.</div>
+            <div class="testi-role">India & Pakistan Gateway</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Two years and still the most reliable payout partner we've found. The Telegram bot makes everything instant — no email chains, no delays, just clean settlement every time."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MZ</div>
+          <div>
+            <div class="testi-name">Mohammed Z.</div>
+            <div class="testi-role">UAE Settlement Hub</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-wrap" style="padding-top: 0;">
+    <div class="section-label fade-up">FAQ</div>
+    <h2 class="section-title fade-up">Common <em>Questions</em><br>Answered.</h2>
+    <div class="faq-list fade-up" style="max-width: 720px;">
+      <div class="faq-item open">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How fast are settlements processed?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-a" style="max-height: 200px;">
+          <div class="faq-a-inner">Most corridors settle in under 2 seconds. Pakistan domestic (JazzCash, EasyPaisa) and India (UPI) are typically under 1 second. All other corridors complete within minutes, never hours.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Which payment methods do you support in Pakistan?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">We support JazzCash, EasyPaisa, Raast, HBL, UBL, Meezan Bank, and all major Pakistani commercial banks via direct bank transfer. New methods are added regularly based on partner needs.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is there a minimum transaction volume required?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">We work with a range of operators — from individuals to enterprises. Contact us on Telegram (@pkpayout_bot) to discuss your volume and get a custom rate for your corridor.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How do I get started or become a partner?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">Simply reach us on Telegram via @pkpayout_bot. We'll discuss your requirements, target corridors, and onboard you within 24 hours. No lengthy forms — just a direct conversation.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How is counterparty risk managed?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">We operate a pre-funded settlement model. Liquidity is reserved before transactions are processed, eliminating the dependency and risk associated with traditional P2P arrangements. Your funds are guaranteed, not contingent.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do you provide transaction reporting?
+          <span class="faq-arrow">+</span>
+        </div>
+        <div class="faq-a">
+          <div class="faq-a-inner">Yes. All partners receive real-time transaction confirmations via Telegram. Full reporting including settlement history, corridor performance, and balance statements is available on request.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETS SELECTOR -->
+<section id="markets-apply">
+  <div class="section-wrap" style="padding-top: 0; padding-bottom: 60px;">
+    <div class="cta-section fade-up">
+      <div class="section-label" style="margin-bottom: 20px;">Get Started Now</div>
+      <h2>Ready to Settle<br><em>Worldwide?</em></h2>
+      <p>Two years of trust. One Telegram message away.</p>
+      <div class="hero-actions" style="justify-content: center; margin-bottom: 32px;">
+        <a href="https://t.me/pkpayout_bot" target="_blank" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.018 9.509c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 14.578l-2.95-.924c-.642-.2-.654-.642.136-.953l11.5-4.432c.537-.194 1.006.131.686.979z"/></svg>
+          Contact @pkpayout_bot
+        </a>
+      </div>
+      <div class="markets-form">
+        <select class="markets-select" id="marketSelect">
+          <option value="">Select your payment corridor…</option>
+          <option>🇵🇰 Pakistan — JazzCash · EasyPaisa · Banks</option>
+          <option>🇮🇳 India — UPI · Paytm · GPay · PhonePe</option>
+          <option>🇧🇩 Bangladesh — bKash · Nagad · Rocket</option>
+          <option>🇦🇪 UAE — Bank Transfer · SWIFT</option>
+          <option>🇬🇧 UK — Faster Payments · CHAPS</option>
+          <option>🇺🇸 USA — ACH · Wire · Zelle</option>
+          <option>🇸🇦 Saudi Arabia — STC Pay · Mada</option>
+          <option>🇪🇬 Egypt — Vodafone Cash · Fawry</option>
+          <option>🇹🇷 Turkey — Papara · Payco</option>
+          <option>🇳🇵 Nepal — Khalti · eSewa</option>
+          <option>🇵🇭 Philippines — GCash · Maya</option>
+          <option>🌍 Other — Contact us directly</option>
+        </select>
+        <a href="https://t.me/pkpayout_bot" target="_blank" class="btn-primary" style="white-space: nowrap;">Apply via Telegram ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="display: inline-flex; text-decoration: none;">
+        <div class="nav-logo-icon">PK</div>
+        <div>
+          <div class="nav-logo-text"><span>PK</span>Payout</div>
+          <div class="nav-logo-sub">Pakistan Payment Solutions</div>
+        </div>
+      </div>
+      <p>Worldwide payment infrastructure built from Pakistan. 2 years of trusted market experience across 20+ global corridors.</p>
+      <a href="https://t.me/pkpayout_bot" target="_blank" class="footer-social-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.018 9.509c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 14.578l-2.95-.924c-.642-.2-.654-.642.136-.953l11.5-4.432c.537-.194 1.006.131.686.979z"/></svg>
+        @pkpayout_bot
+      </a>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Pakistan Payouts</a></li>
+        <li><a href="#services">Global Settlements</a></li>
+        <li><a href="#services">Instant Processing</a></li>
+        <li><a href="#services">B2B Partnerships</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Markets</h4>
+      <ul>
+        <li><a href="#markets">Pakistan</a></li>
+        <li><a href="#markets">India</a></li>
+        <li><a href="#markets">Bangladesh</a></li>
+        <li><a href="#markets">20+ Corridors</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://t.me/pkpayout_bot" target="_blank">Telegram Bot</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#compare">Why Us</a></li>
+        <li><a href="#markets-apply">Get Started</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Pakistan Payment Solutions. All rights reserved.</span>
+    <span>@pkpayout_bot · 2 Years in Market · Worldwide Service</span>
+  </div>
+</footer>
+
+<script>
+  // FAQ toggle
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const answer = item.querySelector('.faq-a');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-a').style.maxHeight = '0';
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  }
+  // Init first open
+  document.querySelectorAll('.faq-item.open').forEach(item => {
+    item.querySelector('.faq-a').style.maxHeight = '200px';
+  });
+
+  // Scroll animations
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
